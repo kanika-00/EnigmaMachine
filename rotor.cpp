@@ -82,7 +82,7 @@ char rotor::encode_forward(char c)
 
     char normalized = toupper(c);
     int offset = mod(m_offset + normalized - ASCII_START, 26);
-
+    std::cout << char(m_wiring[offset]) << "->";
     return m_wiring[offset];
 }
 
@@ -96,8 +96,8 @@ char rotor::encode_backward(char c)
 
     if (index == std::string::npos)
         throw std::runtime_error("Invalid wiring. Character not found");
-
-    return ASCII_START + mod((int)index - this->m_offset, 26);
+    std::cout << char(ASCII_START + mod((int)index - m_offset, 26)) << "->";
+    return ASCII_START + mod((int)index - m_offset, 26);
 }
 
 #pragma mark - Known rotor configurations (from wikipedia)

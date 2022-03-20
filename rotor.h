@@ -66,8 +66,8 @@ private:
     int m_offset;
     std::string m_wiring;
     std::vector<int> m_turnovers;
-    std::string known_wiring(rotor_wiring);
     std::vector<int> known_turnovers(rotor_wiring);
+    std::string known_wiring(rotor_wiring);
 };
 
 #endif
