@@ -1,9 +1,51 @@
 #include "func.h"
 #include <iostream>
 #include <sstream>
+#include <time.h>
 
 #include <Windows.h>
 using namespace std;
+
+string generateKey(vector<int> rot_keys, int refelc_keys, vector<pair<char, char>> plug_keys)
+{
+    srand(time(0));
+    int num = rand();
+    num %= 26;
+    char c = (num + 65);
+    string key = "";
+    for (int i = 0; i < rot_keys.size(); i++)
+    {
+        key = key + c;
+        key = key + to_string(rot_keys[i]);
+        c++;
+        c %= 26;
+        c += 65;
+    }
+    key = key + c;
+    key = key + to_string(refelc_keys);
+    for (int i = 0; i < plug_keys.size(); i++)
+    {
+        key = key + plug_keys[i].first;
+        key = key + plug_keys[i].second;
+    }
+    return key;
+}
+void DecryptKey(vector<int> &rot_keys, int &refelc_keys, vector<pair<char, char>> &plug_keys, string key)
+{
+    int st = key.length() - 1;
+    while (key[st] - '0' < 0 || key[st] - '0' > 9)
+    {
+        plug_keys.push_back(make_pair(key[st - 1], key[st]));
+        st -= 2;
+    }
+    refelc_keys = key[st] - '0';
+    st -= 1;
+    while (st > 0)
+    {
+        rot_keys.push_back(key[st - 1] - '0');
+        st -= 2;
+    }
+}
 void start_machine()
 {
     std::cout << "######## ##    ##  ######  ########  ##    ## ########  ########  #######  ######## " << std::endl;
@@ -38,7 +80,6 @@ void start_machine()
     std::cout << "      |      /____/\\____\\\n";
     std::cout << "\n";
     std::cout << ".:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:" << std::endl;
-    machine m, n;
     // m.rotors = std::vector<rotor>({rotor(w1), rotor(w2), rotor(w3)});
     // m.reflector = rotor(w_ra);
     // m.plugs.set('A', 'D');
@@ -48,12 +89,14 @@ void start_machine()
     // n.reflector = rotor(w_ra);
     // n.plugs.set('A', 'D');
     // n.plugs.set('O', 'L');
-    vector<int> rot_keys;
-    int refelc_keys;
-    vector<pair<char, char>> plug_keys;
+
     while (true)
     {
-        std::cout << "Encryptor>>";
+        machine m, n;
+        vector<int> rot_keys;
+        int refelc_keys = -1;
+        vector<pair<char, char>> plug_keys;
+        std::cout << "Encryptor>";
         bool flag = true;
         std::string k;
         std::cin >> k;
@@ -104,9 +147,10 @@ void start_machine()
                 cout << "1. w_ra\n2. w_rb,\n3. w_rc\n4. w_rbt\n5. w_rct\n";
                 int x;
                 cin >> x;
+                refelc_keys = x;
                 x += 23;
                 m.reflector = rotor(rotor_wiring(x));
-                refelc_keys = x;
+
                 break;
             }
             case 3:
@@ -120,11 +164,17 @@ void start_machine()
                     string s1, s2;
                     cin >> s1 >> s2;
                     m.plugs.set(s1[0], s2[0]);
+                    plug_keys.push_back(make_pair(s1[0], s2[0]));
                 }
                 break;
             }
             case 4:
             {
+                if (plug_keys.size() == 0 || rot_keys.size() == 0 || refelc_keys == -1)
+                {
+                    cout << "NOT A VALID SETTING" << endl;
+                    break;
+                }
                 cout << "Type the message: ";
                 string s;
                 cin >> s;
@@ -132,7 +182,8 @@ void start_machine()
                 cout << "encoding..." << endl;
                 Sleep(3000);
                 cout << "The encrypted message is: " << t << endl;
-
+                cout << "The Decryption key is: " << generateKey(rot_keys, refelc_keys, plug_keys) << endl;
+                flag = false;
                 break;
             }
             case 5:
@@ -143,6 +194,33 @@ void start_machine()
             default:
                 break;
             }
+        }
+        while (k == "decrypt" && flag != false)
+        {
+            cout << "Enter the key: ";
+            string ke;
+            cin >> ke;
+            vector<rotor> vec;
+            DecryptKey(rot_keys, refelc_keys, plug_keys, ke);
+            for (int i = rot_keys.size() - 1; i >= 0; i--)
+            {
+                vec.push_back(rotor(rotor_wiring(rot_keys[i])));
+            }
+            n.rotors = vec;
+            refelc_keys += 23;
+            n.reflector = rotor(rotor_wiring(refelc_keys));
+            for (int i = plug_keys.size() - 1; i >= 0; i--)
+            {
+                n.plugs.set(plug_keys[i].first, plug_keys[i].second);
+            }
+            cout << "Enter the message: ";
+            string t;
+            cin >> t;
+
+            string d = n.encode_string(t);
+            cout << "Decrypted Message is: " << d << endl;
+            flag = false;
+            break;
         }
         // std::string s = m.encode_string(k);
         // std::cout << "\nEntire encoded message: " << s;
