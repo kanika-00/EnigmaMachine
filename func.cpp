@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <time.h>
+#include <fstream>
 
 #include <Windows.h>
 using namespace std;
@@ -42,9 +43,14 @@ void DecryptKey(vector<int> &rot_keys, int &refelc_keys, vector<pair<char, char>
     st -= 1;
     while (st > 0)
     {
-        rot_keys.push_back(key[st - 1] - '0');
-        st -= 2;
+        st -= 1;
+        string temp = "";
+        while (key[st] - '0' <= 9 && key[st] - '0' >= 0)
+            temp = key[st--] + temp;
+        if (temp != "")
+            rot_keys.push_back(stoi(temp));
     }
+    return;
 }
 void start_machine()
 {
@@ -175,16 +181,40 @@ void start_machine()
                     cout << "NOT A VALID SETTING" << endl;
                     break;
                 }
-                cout << "Type the message: ";
-                string s;
-                cin >> s;
-                string t = m.encode_string(s);
-                cout << "encoding..." << endl;
-                Sleep(3000);
-                cout << "The encrypted message is: " << t << endl;
-                cout << "The Decryption key is: " << generateKey(rot_keys, refelc_keys, plug_keys) << endl;
-                flag = false;
-                break;
+                cout << "Please choose from the following: " << endl;
+                cout << "1. Encrypt a word or message\n2. Encrypt a file\n";
+                int u;
+                cin >> u;
+                if (u == 1)
+                {
+                    cout << "Type the message: ";
+                    string s;
+                    cin >> s;
+                    string t = m.encode_string(s);
+                    cout << "encoding..." << endl;
+                    Sleep(3000);
+                    cout << "The encrypted message is: " << t << endl;
+                    cout << "The Decryption key is: " << generateKey(rot_keys, refelc_keys, plug_keys) << endl;
+                    flag = false;
+                    break;
+                }
+                if (u == 2)
+                {
+                    string fname;
+                    cout << "Type the name of the file: ";
+                    ofstream MyFile("encrypted.txt");
+                    cin >> fname;
+                    fstream file;
+                    string word, t, q, filename;
+                    filename = fname;
+                    file.open(filename.c_str());
+                    while (file >> word)
+                    {
+                        string k = m.encode_string(word);
+                        MyFile << k << " ";
+                    }
+                    cout << "The Decryption key is: " << generateKey(rot_keys, refelc_keys, plug_keys) << endl;
+                }
             }
             case 5:
             {
@@ -213,21 +243,42 @@ void start_machine()
             {
                 n.plugs.set(plug_keys[i].first, plug_keys[i].second);
             }
-            cout << "Enter the message: ";
-            string t;
-            cin >> t;
+            cout << "Please choose from the following: " << endl;
+            cout << "1. Decrypt a word or message\n2. Decrypt a file\n";
+            int u;
+            cin >> u;
+            if (u == 1)
+            {
+                cout << "Enter the message: ";
+                string t;
+                cin >> t;
 
-            string d = n.encode_string(t);
-            cout << "Decrypted Message is: " << d << endl;
-            flag = false;
-            break;
+                string d = n.encode_string(t);
+                cout << "Decrypted Message is: " << d << endl;
+                flag = false;
+                break;
+            }
+            else
+            {
+                string fname;
+                cout << "Type the name of the file: ";
+                ofstream MyFile("decrypted.txt");
+                cin >> fname;
+                fstream file;
+                string word, t, q, filename;
+                filename = fname;
+                file.open(filename.c_str());
+                cout << "decrypting..." << endl;
+                while (file >> word)
+                {
+                    string k = n.encode_string(word);
+                    MyFile << k << " ";
+                }
+                Sleep(1000);
+                cout << "Decryption Complete." << endl;
+                break;
+            }
         }
-        // std::string s = m.encode_string(k);
-        // std::cout << "\nEntire encoded message: " << s;
-        // std::cout << "\nDecoding now...";
-
-        // std::string t = n.encode_string(s);
-        // std::cout << "\nEntire decoded message: " << t << "\n";
     }
 
     std::cout << "\n";
