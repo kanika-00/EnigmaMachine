@@ -95,7 +95,36 @@ void start_machine()
     // n.reflector = rotor(w_ra);
     // n.plugs.set('A', 'D');
     // n.plugs.set('O', 'L');
-
+    std::string rotor_wiringStr[] = {"straight", // Default wiring
+                                     "c1 (Commercial Enigma A, B - 1924)",
+                                     "c2 (Commercial Enigma A, B - 1924)",
+                                     "c3 (Commercial Enigma A, B - 1924)", // Commercial Enigma A, B - 1924
+                                     "gr1 (German Railway (Rocket) - 1941)",
+                                     "gr2 (German Railway (Rocket) - 1941)",
+                                     "gr3 (German Railway (Rocket) - 1941)",
+                                     "gr_ukw (German Railway (Rocket) - 1941)",
+                                     "gr_etw (German Railway (Rocket) - 1941)", // German Railway (Rocket) - 1941
+                                     "k1 (Swiss K - 1939)",
+                                     "k2 (Swiss K - 1939)",
+                                     "k3 (Swiss K - 1939)",
+                                     "k_ukw (Swiss K - 1939)",
+                                     "k_etw (Swiss K - 1939)", // Swiss K - 1939
+                                     "w1 (Military Rotors)",
+                                     "w2 (Military Rotors)",
+                                     "w3 (Military Rotor)",
+                                     "w4 (M3 Army)",
+                                     "w5 (M3 Army)",
+                                     "w6 (M3 & M4 Naval (FEB 1942))",
+                                     "w7 (M3 & M4 Naval (FEB 1942))",
+                                     "w8 (M3 & M4 Naval (FEB 1942))", //   - 1930-1939
+                                     "w_beta (Spring 1941)",
+                                     "w_gamma (Spring 1942)",
+                                     "w_ra",
+                                     "w_rb",
+                                     "w_rc",
+                                     "w_rbt",
+                                     "w_rct",
+                                     "w_etw"};
     while (true)
     {
         machine m, n;
@@ -119,7 +148,8 @@ void start_machine()
                  << "2. Add Reflector\n"
                  << "3. Add Plugs\n"
                  << "4. Encrypt with chosen settings\n"
-                 << "5. Quit\n";
+                 << "5. Print Machine Configurations\n"
+                 << "6. Quit\n";
             int choice;
             cin >> choice;
             string rotors2;
@@ -218,10 +248,35 @@ void start_machine()
             }
             case 5:
             {
+                cout << "ROTORS: " << endl;
+                for (int i = 0; i < rot_keys.size(); i++)
+                {
+                    cout << endl;
+                    cout << "ROTOR NUMBER: " << rot_keys[i] + 1 << endl;
+                    cout << "NAME: " << rotor_wiringStr[rot_keys[i]] << endl;
+                    cout << "State: " << i + 1 << endl;
+                    cout << "Wiring: " << rotor().known_wiring(rotor_wiring(rot_keys[i])) << endl;
+                }
+                cout << endl;
+                cout << "REFLECTOR NUMBER: " << refelc_keys << endl;
+                cout << "REFLECTOR NAME: " << rotor_wiringStr[refelc_keys + 23] << endl;
+                cout << "REFLECTOR WIRING : " << rotor().known_wiring(rotor_wiring(refelc_keys + 23)) << endl;
+                cout << endl;
+                cout << "PLUGS: " << endl;
+                for (int i = 0; i < plug_keys.size(); i++)
+                {
+                    cout << "PLUG-" << i + 1 << ": " << plug_keys[i].first << "<->" << plug_keys[i].second << endl;
+                }
+                cout << endl;
+                break;
+            }
+            case 6:
+            {
                 flag = false;
                 break;
             }
             default:
+                cout << "Not a valid choice" << endl;
                 break;
             }
         }
@@ -278,6 +333,12 @@ void start_machine()
                 cout << "Decryption Complete." << endl;
                 break;
             }
+        }
+        if (k == "help")
+        {
+        }
+        if (k == "about")
+        {
         }
     }
 

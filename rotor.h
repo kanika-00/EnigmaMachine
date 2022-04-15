@@ -61,13 +61,13 @@ public:
     char encode_backward(char);
     bool is_in_turnover_position();
     bool is_reflector();
+    std::string known_wiring(rotor_wiring);
 
 private:
     int m_offset;
     std::string m_wiring;
     std::vector<int> m_turnovers;
     std::vector<int> known_turnovers(rotor_wiring);
-    std::string known_wiring(rotor_wiring);
 };
 
 #endif
