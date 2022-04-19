@@ -131,7 +131,7 @@ void start_machine()
         vector<int> rot_keys;
         int refelc_keys = -1;
         vector<pair<char, char>> plug_keys;
-        std::cout << "Encryptor>";
+        std::cout << "Encryptor> ";
         bool flag = true;
         std::string k;
         std::cin >> k;
