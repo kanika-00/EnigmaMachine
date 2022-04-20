@@ -336,21 +336,22 @@ void start_machine()
         }
         if (k == "help")
         {
-            cout << "To encrypt any message, you need to configure the machine first. To do so, type ‘encrypt’. The Enigma Machine has 3 main parts, rotors, plugs and reflectors. You must select at least one configuration for ALL 3 to make a complete machine." << endl;
+            cout << "To encrypt any message, you need to configure the machine first. To do so, type 'encrypt'. The Enigma Machine has 3 main parts, rotors, plugs and reflectors. You must select at least one configuration for ALL 3 to make a complete machine." << endl;
             cout << " " << endl;
             cout << "1. Rotors: Each rotor implements a substitution cipher. You can select from 30 different configurations. Multiple rotors can be added by typing their corresponding numbers separated by space." << endl;
             cout << "2. Reflector: You can select from 5 different combinations. The machine has only one reflector." << endl;
             cout << "3. Plug: Each plug swaps the 2 given letters. Multiple plugs can be added." << endl;
             cout << "After adding these 3 parts, you can press 6 to encrypt either a typed message (without spaces) or file. This will also generate a unique key. You can also see the final machine configuration by pressing 5." << endl;
             cout << " " << endl;
-            cout << "To decrypt a message, type ‘decrypt’ and use the same key as encryption. You can decrypt either a typed message (without spaces) or file." << endl;
+            cout << "To decrypt a message, type 'decrypt' and use the same key as encryption. You can decrypt either a typed message (without spaces) or file." << endl;
             cout << " " << endl;
-            cout << "To know more about the Enigma Machine, type ‘about’. Press exit to terminate" << endl;
+            cout << "To know more about the Enigma Machine, type 'about'. Press exit to terminate" << endl;
             cout << " " << endl;
         }
         if (k == "about")
         {
-            cout << "The Enigma Machine is a cipher device invented and used by Germany in World War 2 to protect commercial, diplomatic, and important military communication. It is used to encrypt and decrypt messages using a key. The Enigma machine was considered so secure that it was used to encipher the most top-secret messages. In typical use, one person types plain text on the Enigma's keyboard and the corresponding illuminated letters are the encoded ciphertext. This encrypted message is then communicated and as the receiver types the encoded message, the corresponding letters illuminated reveal the original plain text message. The sender and receiver share a common secret key. The security of the system depends on machine settings that were generally changed daily, based on secret key lists distributed in advance, and on other settings that were changed for each message." << endl;
+            cout << "The Enigma Machine is a cipher device invented and used by Germany in World War 2 to protect commercial, diplomatic, and important military communication. It is used to encrypt and decrypt messages using a key. The Enigma machine was considered so secure that it was used to encipher the most top-secret messages. In typical use, one person types plain text on the Enigma's keyboard and the corresponding illuminated letters are the encoded ciphertext. This encrypted message is then communicated and as the receiver types the encoded message, the corresponding letters illuminated reveal the original plain text message. The sender and receiver share a common secret key. The security of the system depends on machine settings that were generally changed daily, based on secret key lists distributed in advance, and on other settings that were changed for each message." << endl
+                 << endl;
         }
     }
 
